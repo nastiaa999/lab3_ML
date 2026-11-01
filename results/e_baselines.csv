@@ -1,0 +1,6 @@
+model,shots,f1_fail,balanced_acc,accuracy
+константа «нет отказа»,0,0.0,0.5,0.8
+LogisticRegression,5,0.4,0.625,0.85
+GaussianNB,5,0.0,0.5,0.8
+LogisticRegression,20,0.3076923076923077,0.5875,0.82
+GaussianNB,20,0.5106382978723404,0.70625,0.77

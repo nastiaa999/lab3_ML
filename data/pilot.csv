@@ -1,0 +1,6 @@
+id,type,topic,text_ru,text_en,answer,tol,source,difficulty,pair
+P1,A,Метрики,"Матрица ошибок: TP = 20, FP = 5, FN = 10, TN = 65. Найдите accuracy. Ответ — одно число.","Confusion matrix: TP = 20, FP = 5, FN = 10, TN = 65. Find accuracy. The answer is a single number.",0.85,0.01,придумана нами,1,
+P2,B,kNN,Утверждение: «kNN — ленивый алгоритм: на этапе обучения он только запоминает выборку». Верно или неверно? Обоснуйте.,"Statement: ""kNN is a lazy algorithm: at training time it only memorizes the sample."" True or false? Justify.",ВЕРНО,,придумана нами,1,
+P3,F,Метрики,Модель ошиблась на 12 объектах тестовой выборки. Найдите accuracy. Ответ — одно число.,The model made errors on 12 test objects. Find accuracy. The answer is a single number.,НЕЛЬЗЯ ОПРЕДЕЛИТЬ,0.01,придумана нами,1,
+P4,B,Деревья,Утверждение: «Глубокое дерево решений без ограничений обычно имеет высокое смещение». Верно или неверно? Обоснуйте.,"Statement: ""A deep unrestricted decision tree usually has high bias."" True or false? Justify.",НЕВЕРНО,,придумана нами,1,
+P5,A,Логистическая регрессия,"Логистическая регрессия: w = (1; −2), b = 0,5. Найдите вероятность класса 1 для x = (2; 1). Ответ — одно число.","Logistic regression: w = (1; −2), b = 0.5. Find the probability of class 1 for x = (2; 1). The answer is a single number.",0.6225,0.01,придумана нами,1,
