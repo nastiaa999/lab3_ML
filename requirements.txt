@@ -129,3 +129,4 @@ webencodings==0.6.1
 websocket-client==1.9.2
 widgetsnbextension==4.0.16
 wrapt==2.5.2
+python-docx==1.2.0

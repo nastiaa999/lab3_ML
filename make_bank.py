@@ -183,7 +183,7 @@ tasks = [
          text_en="Write Python (sklearn) code: on load_wine hold out 25% for test (stratify, random_state=42), tune "
                  "the number of neighbors k from 1 to 15 for kNN with 5-fold cross-validation and print test "
                  "accuracy. The program's last printed line is a single number.",
-         answer=1.0),
+         answer="0.7333 (без масштабирования) или 1.0 (со StandardScaler) — оба допустимы"),
     dict(id="D2", type="D", topic="Линейная регрессия", source=OWN, difficulty=2, tol=0.03,
          text_ru="Напиши код на Python (sklearn): на датасете load_diabetes (тест 20%, random_state=42) обучи "
                  "Ridge, подобрав alpha из [0.01, 0.1, 1, 10, 100] кросс-валидацией, и выведи R² на тесте. "
@@ -191,7 +191,7 @@ tasks = [
          text_en="Write Python (sklearn) code: on load_diabetes (20% test, random_state=42) train Ridge, tuning "
                  "alpha from [0.01, 0.1, 1, 10, 100] with cross-validation, and print test R². The program's last "
                  "printed line is a single number.",
-         answer=0.4572),
+         answer="0.4609 (без масштабирования) или 0.4572 (со StandardScaler) — оба допустимы"),
     dict(id="D3", type="D", topic="Ансамбли / метрики", source=OWN, difficulty=3, tol=0.05,
          text_ru="Напиши код на Python (sklearn): сгенерируй make_classification(n_samples=2000, n_features=20, "
                  "n_informative=5, weights=[0.95], random_state=42), обучи случайный лес (random_state=42) и "
@@ -201,7 +201,7 @@ tasks = [
                  "n_informative=5, weights=[0.95], random_state=42), train a random forest (random_state=42) and "
                  "evaluate how well it detects the rare class on a 25% hold-out set (random_state=42). The "
                  "program's last printed line is a single number — the value of an appropriate metric.",
-         answer=0.3125),
+         answer="любая метрика редкого класса: F1 0.2941, recall 0.1724 или PR-AUC 0.5388"),
     dict(id="D4", type="D", topic="PCA / лог. регрессия", source=OWN, difficulty=2, tol=0.03,
          text_ru="Напиши код на Python (sklearn): на датасете load_digits (тест 25%, stratify, random_state=42) "
                  "понизь размерность с помощью PCA, сохранив 95% дисперсии, обучи логистическую регрессию и выведи "
@@ -209,7 +209,7 @@ tasks = [
          text_en="Write Python (sklearn) code: on load_digits (25% test, stratify, random_state=42) reduce "
                  "dimensionality with PCA keeping 95% of the variance, train logistic regression and print test "
                  "accuracy. The program's last printed line is a single number.",
-         answer=0.96),
+         answer="0.9511 (без масштабирования) или 0.96 (со StandardScaler) — оба допустимы"),
     dict(id="D5", type="D", topic="Кластеризация", source=OWN, difficulty=2, tol=0.03,
          text_ru="Напиши код на Python (sklearn): кластеризуй load_iris на 3 кластера методом KMeans "
                  "(random_state=42), не используя метки при обучении, и оцени совпадение кластеров с настоящими "

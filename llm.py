@@ -13,13 +13,18 @@ LOG_PATH = "results/calls.jsonl"
 
 # Короткое имя модели -> как к ней обращаться. Точный ID, который вернул сервер, пишется в журнал.
 MODELS = {
-    "gigachat": {"provider": "gigachat", "model": "GigaChat-2-Max", "price_in": None, "price_out": None},
-    "alice": {"provider": "yandex", "model": "aliceai-llm", "price_in": 0.5, "price_out": 1.2},
-    "deepseek": {"provider": "yandex", "model": "deepseek-v4.1-flash", "price_in": 0.3, "price_out": 0.5},
-    "qwen_local": {"provider": "ollama", "model": "qwen3:4b", "price_in": 0.0, "price_out": 0.0},
+    "gigachat_max": {"provider": "gigachat", "model": "GigaChat-2-Max"},
+    "alice_flash": {"provider": "yandex", "model": "aliceai-llm-flash/latest"},
+    "gpt_oss": {"provider": "groq", "model": "openai/gpt-oss-120b", "max_tokens": 8192},
+    "qwen_local": {"provider": "ollama", "model": "qwen3:4b", "max_tokens": 8192},
 }
-# Цены — рубли за 1000 токенов по официальным тарифам Yandex AI Studio (ноябрь 2026).
-# Для GigaChat цена считается из пакета в анализе (тариф пакетный, а не за 1000 токенов).
+# qwen3:4b: у Ollama окно контекста по умолчанию 4096 — длинные рассуждения в него не помещались,
+# модель теряла условие и зацикливалась. Окно увеличено до 16384 (переменная OLLAMA_CONTEXT_LENGTH),
+# длина ответа ограничена так же, как у gpt-oss.
+# gpt-oss: лимит ответа поднят с 3072 (по умолчанию у Groq) до 8192 — на 20 примерах рассуждения
+# не помещались и ответ обрезался. Ни один ответ до этого лимита не доходил, так что сравнение не нарушено.
+# Цены для расчёта стоимости правильного ответа задаются в анализе по официальным тарифам
+# (GigaChat — пакеты Сбера, Alice и gpt-oss-120b — прайс Yandex AI Studio), хотя мы пользуемся бесплатными лимитами.
 
 _clients = {}
 
@@ -29,10 +34,15 @@ def _client(provider):
     if provider not in _clients:
         if provider == "yandex":
             _clients[provider] = OpenAI(api_key=os.environ["YANDEX_API_KEY"],
-                                        base_url="https://llm.api.cloud.yandex.net/v1",
+                                        base_url="https://ai.api.cloud.yandex.net/v1",
                                         project=os.environ["YANDEX_FOLDER_ID"])
+        elif provider == "groq":
+            _clients[provider] = OpenAI(api_key=os.environ["GROQ_API_KEY"],
+                                        base_url="https://api.groq.com/openai/v1")
         elif provider == "ollama":
-            _clients[provider] = OpenAI(api_key="ollama", base_url="http://localhost:11434/v1")
+            # локальная модель медленная: ждём до 40 мин и не повторяем запрос автоматически
+            _clients[provider] = OpenAI(api_key="ollama", base_url="http://localhost:11434/v1",
+                                        timeout=2400, max_retries=0)
         elif provider == "gigachat":
             from gigachat import GigaChat
             _clients[provider] = GigaChat(credentials=os.environ["GIGACHAT_CREDENTIALS"],
@@ -48,9 +58,10 @@ def _call(name, messages, temperature):
         resp = client.chat({"model": cfg["model"], "messages": messages, "temperature": temperature})
     else:
         model = cfg["model"]
-        if cfg["provider"] == "yandex":
+        if cfg["provider"] == "yandex":  # у Яндекса полный ID модели включает каталог
             model = f"gpt://{os.environ['YANDEX_FOLDER_ID']}/{model}"
-        resp = client.chat.completions.create(model=model, messages=messages, temperature=temperature)
+        extra = {"max_tokens": cfg["max_tokens"]} if "max_tokens" in cfg else {}
+        resp = client.chat.completions.create(model=model, messages=messages, temperature=temperature, **extra)
     return (resp.choices[0].message.content, resp.usage.prompt_tokens,
             resp.usage.completion_tokens, resp.model)
 
